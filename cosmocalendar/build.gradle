@@ -10,8 +10,8 @@ ext {
 
     libraryDescription = 'Customizable calendar on Android'
 
-    siteUrl = 'https://github.com/AppliKeySolutions/CosmoCalendar'
-    gitUrl = 'https://github.com/AppliKeySolutions/CosmoCalendar.git'
+    siteUrl = 'https://github.com/kingxlayer/CosmoCalendar'
+    gitUrl = 'https://github.com/kingxlayer/CosmoCalendar.git'
 
     libraryVersion = '1.0.5'
 
