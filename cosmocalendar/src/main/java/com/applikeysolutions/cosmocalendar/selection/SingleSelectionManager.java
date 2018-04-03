@@ -13,6 +13,11 @@ public class SingleSelectionManager extends BaseSelectionManager {
     }
 
     @Override
+    public void setInitialPais(Day start, Day end) {
+        throw new RuntimeException("Not available");
+    }
+
+    @Override
     public void toggleDay(@NonNull Day day) {
         this.day = day;
         onDaySelectedListener.onDaySelected();

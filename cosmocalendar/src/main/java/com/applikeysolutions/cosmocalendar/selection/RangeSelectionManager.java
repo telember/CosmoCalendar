@@ -20,6 +20,11 @@ public class RangeSelectionManager extends BaseSelectionManager {
     }
 
     @Override
+    public void setInitialPais(Day start, Day end) {
+        days = Pair.create(start, end);
+    }
+
+    @Override
     public void toggleDay(@NonNull Day day) {
         if (days == null && tempDay == null || tempDay == null) {
             tempDay = day;

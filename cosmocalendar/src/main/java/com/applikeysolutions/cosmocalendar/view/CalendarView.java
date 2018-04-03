@@ -567,6 +567,11 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         update();
     }
 
+    public void setSelectedDays(Day start, Day end) {
+        selectionManager.setInitialPais(start, end);
+        displaySelectedDays();
+    }
+
     /**
      * Returns all selected days
      *
