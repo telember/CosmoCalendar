@@ -13,11 +13,11 @@ ext {
     siteUrl = 'https://github.com/AppliKeySolutions/CosmoCalendar'
     gitUrl = 'https://github.com/AppliKeySolutions/CosmoCalendar.git'
 
-    libraryVersion = '1.0.4'
+    libraryVersion = '1.0.5'
 
-    developerId = 'devilbrain666'
-    developerName = 'Ostapenko Yura'
-    developerEmail = 'ostapenko1990yura@gmail.com'
+    developerId = 'kingxlayer'
+    developerName = 'Christian Rojas'
+    developerEmail = 'crojaspy@gmail.com'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
@@ -31,8 +31,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
     }
     buildTypes {
         release {
