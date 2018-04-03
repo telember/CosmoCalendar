@@ -8,7 +8,7 @@ public abstract class BaseSelectionManager {
 
     protected OnDaySelectedListener onDaySelectedListener;
 
-    public abstract void setInitialPais(Day start, Day end);
+    public abstract void setInitialPair(Day start, Day end);
 
     public abstract void toggleDay(@NonNull Day day);
 

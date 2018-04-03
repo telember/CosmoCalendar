@@ -13,7 +13,7 @@ public class SingleSelectionManager extends BaseSelectionManager {
     }
 
     @Override
-    public void setInitialPais(Day start, Day end) {
+    public void setInitialPair(Day start, Day end) {
         throw new RuntimeException("Not available");
     }
 

@@ -31,7 +31,7 @@ public class MultipleSelectionManager extends BaseCriteriaSelectionManager {
     }
 
     @Override
-    public void setInitialPais(Day start, Day end) {
+    public void setInitialPair(Day start, Day end) {
         throw new RuntimeException("Not available");
     }
 

@@ -20,7 +20,7 @@ public class RangeSelectionManager extends BaseSelectionManager {
     }
 
     @Override
-    public void setInitialPais(Day start, Day end) {
+    public void setInitialPair(Day start, Day end) {
         days = Pair.create(start, end);
     }
 
