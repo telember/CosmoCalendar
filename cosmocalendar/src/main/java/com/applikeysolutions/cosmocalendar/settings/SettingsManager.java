@@ -88,6 +88,16 @@ public class SettingsManager implements AppearanceInterface, DateInterface, Cale
     }
 
     @Override
+    public int getSelectedDayStartTextColor() {
+        return appearanceModel.getSelectedDayStartTextColor();
+    }
+
+    @Override
+    public int getSelectedDayEndTextColor() {
+        return appearanceModel.getSelectedDayEndTextColor();
+    }
+
+    @Override
     public int getSelectedDayBackgroundColor() {
         return appearanceModel.getSelectedDayBackgroundColor();
     }
@@ -200,6 +210,16 @@ public class SettingsManager implements AppearanceInterface, DateInterface, Cale
     @Override
     public void setSelectedDayTextColor(int selectedDayTextColor) {
         appearanceModel.setSelectedDayTextColor(selectedDayTextColor);
+    }
+
+    @Override
+    public void setSelectedDayStartTextColor(int color) {
+        appearanceModel.setSelectedDayStartTextColor(color);
+    }
+
+    @Override
+    public void setSelectedDayEndTextColor(int color) {
+        appearanceModel.setSelectedDayEndTextColor(color);
     }
 
     @Override

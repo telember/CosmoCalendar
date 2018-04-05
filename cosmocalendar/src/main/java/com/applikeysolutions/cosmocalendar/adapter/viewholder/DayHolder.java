@@ -67,14 +67,18 @@ public class DayHolder extends BaseDayHolder {
     }
 
     private void select(Day day) {
+
         if (day.isFromConnectedCalendar()) {
+
             if(day.isDisabled()){
                 ctvDay.setTextColor(day.getConnectedDaysDisabledTextColor());
             } else {
                 ctvDay.setTextColor(day.getConnectedDaysSelectedTextColor());
             }
             addConnectedDayIcon(true);
+
         } else {
+
             ctvDay.setTextColor(calendarView.getSelectedDayTextColor());
             ctvDay.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
@@ -107,17 +111,49 @@ public class DayHolder extends BaseDayHolder {
     }
 
     private void animateDay(SelectionState state, Day day) {
+
         if (day.getSelectionState() != state) {
+
             if (day.isSelectionCircleDrawed() && state == SelectionState.SINGLE_DAY) {
+
                 ctvDay.showAsSingleCircle(calendarView);
+
+            } else  if (state == SelectionState.START_RANGE_DAY_WITHOUT_END) {
+
+                if (day.isSelectionCircleDrawed()) {
+                    ctvDay.showAsStartCircleWithouEnd(calendarView, false);
+                } else {
+                    ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
+                }
+
+                ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
             } else if (day.isSelectionCircleDrawed() && state == SelectionState.START_RANGE_DAY) {
+
                 ctvDay.showAsStartCircle(calendarView, false);
+                ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
+            } else if (!day.isSelectionCircleDrawed() && state == SelectionState.START_RANGE_DAY) {
+
+                ctvDay.showAsStartCircle(calendarView, false);
+                ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
             } else if (day.isSelectionCircleDrawed() && state == SelectionState.END_RANGE_DAY) {
+
                 ctvDay.showAsEndCircle(calendarView, false);
+                ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
+            } else if (!day.isSelectionCircleDrawed() && state == SelectionState.END_RANGE_DAY) {
+                // PISTA
+                ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
+                ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
             } else {
+
                 ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
             }
+
         } else {
+
             switch (state) {
                 case SINGLE_DAY:
                     if (day.isSelectionCircleDrawed()) {
@@ -132,19 +168,25 @@ public class DayHolder extends BaseDayHolder {
                     break;
 
                 case START_RANGE_DAY_WITHOUT_END:
+
                     if (day.isSelectionCircleDrawed()) {
                         ctvDay.showAsStartCircleWithouEnd(calendarView, false);
                     } else {
                         ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
                     }
+
                     break;
 
                 case START_RANGE_DAY:
+
                     if (day.isSelectionCircleDrawed()) {
                         ctvDay.showAsStartCircle(calendarView, false);
                     } else {
                         ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
                     }
+
+                    ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
                     break;
 
                 case END_RANGE_DAY:
@@ -153,6 +195,9 @@ public class DayHolder extends BaseDayHolder {
                     } else {
                         ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
                     }
+
+                    ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
                     break;
             }
         }

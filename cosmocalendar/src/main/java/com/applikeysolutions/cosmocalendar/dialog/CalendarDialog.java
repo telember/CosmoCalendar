@@ -149,6 +149,16 @@ public class CalendarDialog extends Dialog implements View.OnClickListener,
     }
 
     @Override
+    public int getSelectedDayStartTextColor() {
+        return calendarView.getSelectedDayStartTextColor();
+    }
+
+    @Override
+    public int getSelectedDayEndTextColor() {
+        return calendarView.getSelectedDayEndTextColor();
+    }
+
+    @Override
     public int getSelectedDayBackgroundColor() {
         return calendarView.getSelectedDayBackgroundColor();
     }
@@ -261,6 +271,16 @@ public class CalendarDialog extends Dialog implements View.OnClickListener,
     @Override
     public void setSelectedDayTextColor(int selectedDayTextColor) {
         calendarView.setSelectedDayTextColor(selectedDayTextColor);
+    }
+
+    @Override
+    public void setSelectedDayStartTextColor(int color) {
+        calendarView.setSelectedDayStartTextColor(color);
+    }
+
+    @Override
+    public void setSelectedDayEndTextColor(int color) {
+        calendarView.setSelectedDayEndTextColor(color);
     }
 
     @Override

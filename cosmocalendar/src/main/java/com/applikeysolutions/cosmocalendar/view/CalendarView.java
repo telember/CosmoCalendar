@@ -17,6 +17,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,7 @@ import com.applikeysolutions.cosmocalendar.utils.snap.GravitySnapHelper;
 import com.applikeysolutions.cosmocalendar.view.customviews.CircleAnimationTextView;
 import com.applikeysolutions.cosmocalendar.view.customviews.SquareTextView;
 import com.applikeysolutions.cosmocalendar.view.delegate.MonthDelegate;
+import com.applikeysolutions.cosmocalendar.view.delegate.OnRangeDaySelectedListener;
 import com.applikeysolutions.customizablecalendar.R;
 
 import java.util.ArrayList;
@@ -68,6 +70,9 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         AppearanceInterface, DateInterface, CalendarListsInterface, SelectionInterface, MultipleSelectionBarAdapter.ListItemClickListener, GravitySnapHelper.SnapListener {
 
     private List<Day> selectedDays;
+
+    // Day selection listener
+    private OnRangeDaySelectedListener mDaySelectionListener;
 
     //Recycler
     private SlowdownRecyclerView rvMonths;
@@ -130,6 +135,10 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         }
     }
 
+    public void setDaySelectionDelegate(OnRangeDaySelectedListener listener) {
+        mDaySelectionListener = listener;
+    }
+
     private void handleAttributes(AttributeSet attrs, int defStyle, int defStyleRes) {
         settingsManager = new SettingsManager();
         final TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.CalendarView, defStyle, defStyleRes);
@@ -148,6 +157,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      * @param typedArray
      */
     private void handleAttributes(TypedArray typedArray) {
+
         int orientation = typedArray.getInteger(R.styleable.CalendarView_orientation, SettingsManager.DEFAULT_ORIENTATION);
         int firstDayOfWeek = typedArray.getInteger(R.styleable.CalendarView_firstDayOfTheWeek, SettingsManager.DEFAULT_FIRST_DAY_OF_WEEK);
         int selectionType = typedArray.getInteger(R.styleable.CalendarView_selectionType, SettingsManager.DEFAULT_SELECTION_TYPE);
@@ -159,7 +169,11 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         int dayTextColor = typedArray.getColor(R.styleable.CalendarView_dayTextColor, ContextCompat.getColor(getContext(), R.color.default_day_text_color));
         int weekendDayTextColor = typedArray.getColor(R.styleable.CalendarView_weekendDayTextColor, ContextCompat.getColor(getContext(), R.color.default_weekend_day_text_color));
         int weekDayTitleTextColor = typedArray.getColor(R.styleable.CalendarView_weekDayTitleTextColor, ContextCompat.getColor(getContext(), R.color.default_week_day_title_text_color));
+
         int selectedDayTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_text_color));
+        int selectedDayStartTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayStartTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_start_text_color));
+        int selectedDayEndTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayEndTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_end_text_color));
+
         int selectedDayBackgroundColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_color));
         int selectedDayBackgroundStartColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundStartColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_start_color));
         int selectedDayBackgroundEndColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundEndColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_end_color));
@@ -182,7 +196,11 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         settingsManager.setWeekendDayTextColor(weekendDayTextColor);
         settingsManager.setWeekDayTitleTextColor(weekDayTitleTextColor);
         settingsManager.setSelectedDayTextColor(selectedDayTextColor);
+
         settingsManager.setSelectedDayBackgroundColor(selectedDayBackgroundColor);
+        settingsManager.setSelectedDayStartTextColor(selectedDayStartTextColor);
+        settingsManager.setSelectedDayEndTextColor(selectedDayEndTextColor);
+
         settingsManager.setSelectedDayBackgroundStartColor(selectedDayBackgroundStartColor);
         settingsManager.setSelectedDayBackgroundEndColor(selectedDayBackgroundEndColor);
         settingsManager.setConnectedDayIconRes(connectedDayIconRes);
@@ -380,10 +398,14 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     }
 
     private void createRecyclerView() {
+
         rvMonths = new SlowdownRecyclerView(getContext());
+        rvMonths.addItemDecoration(new GridSpacingItemDecoration(1, 1, true, 0));
+
         rvMonths.setId(View.generateViewId());
         rvMonths.setHasFixedSize(true);
         rvMonths.setNestedScrollingEnabled(false);
+
         ((SimpleItemAnimator) rvMonths.getItemAnimator()).setSupportsChangeAnimations(false);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -396,7 +418,9 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         changeSnapHelper();
 
         rvMonths.setAdapter(monthAdapter);
+
         rvMonths.scrollToPosition(SettingsManager.DEFAULT_MONTH_COUNT / 2);
+
         rvMonths.addOnScrollListener(pagingScrollListener);
         rvMonths.getRecycledViewPool().setMaxRecycledViews(ItemViewType.MONTH, 10);
         addView(rvMonths);
@@ -569,6 +593,9 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
     public void setSelectedDays(Day start, Day end) {
         selectionManager.setInitialPair(start, end);
+
+        setFirstSelectedMonthPosition();
+
         displaySelectedDays();
     }
 
@@ -638,6 +665,10 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     public void onDaySelected() {
         selectedDays = getSelectedDays();
         displaySelectedDays();
+
+        if (mDaySelectionListener != null) {
+            mDaySelectionListener.onDaySelected(selectedDays);
+        }
     }
 
     /**
@@ -670,33 +701,39 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      * Display selected days for RANGE mode in bottom bar
      */
     private void displaySelectedDaysRange() {
+
         if (selectionManager instanceof RangeSelectionManager) {
+
             Pair<Day, Day> days = ((RangeSelectionManager) selectionManager).getDays();
-            if (days != null) {
-                llRangeSelection.setVisibility(VISIBLE);
-                TextView tvStartRangeTitle = (TextView) llRangeSelection.findViewById(R.id.tv_range_start_date);
-                tvStartRangeTitle.setText(CalendarUtils.getYearNameTitle(days.first));
-                tvStartRangeTitle.setTextColor(getSelectionBarMonthTextColor());
 
-                TextView tvEndRangeTitle = (TextView) llRangeSelection.findViewById(R.id.tv_range_end_date);
-                tvEndRangeTitle.setText(CalendarUtils.getYearNameTitle(days.second));
-                tvEndRangeTitle.setTextColor(getSelectionBarMonthTextColor());
+            llRangeSelection.setVisibility(GONE);
 
-                CircleAnimationTextView catvStart = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_start);
-                catvStart.setText(String.valueOf(days.first.getDayNumber()));
-                catvStart.setTextColor(getSelectedDayTextColor());
-                catvStart.showAsStartCircle(this, true);
-
-                CircleAnimationTextView catvEnd = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_end);
-                catvEnd.setText(String.valueOf(days.second.getDayNumber()));
-                catvEnd.setTextColor(getSelectedDayTextColor());
-                catvEnd.showAsEndCircle(this, true);
-
-                CircleAnimationTextView catvMiddle = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_middle);
-                catvMiddle.showAsRange(this);
-            } else {
-                llRangeSelection.setVisibility(GONE);
-            }
+//            if (days != null) {
+//                llRangeSelection.setVisibility(VISIBLE);
+//                TextView tvStartRangeTitle = (TextView) llRangeSelection.findViewById(R.id.tv_range_start_date);
+//                tvStartRangeTitle.setText(CalendarUtils.getYearNameTitle(days.first));
+//                tvStartRangeTitle.setTextColor(getSelectionBarMonthTextColor());
+//
+//                TextView tvEndRangeTitle = (TextView) llRangeSelection.findViewById(R.id.tv_range_end_date);
+//                tvEndRangeTitle.setText(CalendarUtils.getYearNameTitle(days.second));
+//                tvEndRangeTitle.setTextColor(getSelectionBarMonthTextColor());
+//
+//                CircleAnimationTextView catvStart = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_start);
+//                catvStart.setText(String.valueOf(days.first.getDayNumber()));
+//                catvStart.setTextColor(getSelectedDayStartTextColor());
+//                catvStart.showAsStartCircle(this, true);
+//
+//
+//                CircleAnimationTextView catvEnd = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_end);
+//                catvEnd.setText(String.valueOf(days.second.getDayNumber()));
+//                catvEnd.setTextColor(getSelectedDayEndTextColor());
+//                catvEnd.showAsEndCircle(this, true);
+//
+//                CircleAnimationTextView catvMiddle = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_middle);
+//                catvMiddle.showAsRange(this);
+//            } else {
+//                llRangeSelection.setVisibility(GONE);
+//            }
         }
     }
 
@@ -723,6 +760,29 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         flBottomSelectionBar.setVisibility(getCalendarOrientation() == OrientationHelper.HORIZONTAL ? View.VISIBLE : View.GONE);
         rvMultipleSelectedList.setVisibility(getCalendarOrientation() == OrientationHelper.HORIZONTAL && getSelectionType() == SelectionType.MULTIPLE ? View.VISIBLE : View.GONE);
         llRangeSelection.setVisibility(needToShowSelectedDaysRange() ? View.VISIBLE : View.GONE);
+    }
+
+    private void setFirstSelectedMonthPosition() {
+
+        int mPosition = 0;
+        int i = 0;
+
+        RangeSelectionManager mSelectionManager = (RangeSelectionManager) selectionManager;
+
+        for (Month mMonth : monthAdapter.getData()) {
+
+            Log.d(CalendarView.class.getSimpleName(), mMonth.getFirstDay().getDayNumber() + " - " + mMonth.getFirstDay().getMonthNumber() + " - " + mMonth.getFirstDay().getYearNumber());
+            Log.d(CalendarView.class.getSimpleName(), mSelectionManager.getDays().first.getDayNumber() + " - " + mSelectionManager.getDays().first.getMonthNumber() + " - " + mSelectionManager.getDays().first.getYearNumber());
+
+            if ( (mMonth.getFirstDay().getYearNumber() == mSelectionManager.getDays().first.getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getDays().first.getMonthNumber())) {
+                mPosition = i;
+                break;
+            }
+
+            i++;
+        }
+
+        rvMonths.scrollToPosition(mPosition);
     }
 
     @Override
@@ -781,6 +841,16 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     @Override
     public int getSelectedDayTextColor() {
         return settingsManager.getSelectedDayTextColor();
+    }
+
+    @Override
+    public int getSelectedDayStartTextColor() {
+        return settingsManager.getSelectedDayStartTextColor();
+    }
+
+    @Override
+    public int getSelectedDayEndTextColor() {
+        return settingsManager.getSelectedDayEndTextColor();
     }
 
     @Override
@@ -906,6 +976,16 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     public void setSelectedDayTextColor(int selectedDayTextColor) {
         settingsManager.setSelectedDayTextColor(selectedDayTextColor);
         update();
+    }
+
+    @Override
+    public void setSelectedDayStartTextColor(int color) {
+        settingsManager.setSelectedDayStartTextColor(color);
+    }
+
+    @Override
+    public void setSelectedDayEndTextColor(int color) {
+        settingsManager.setSelectedDayEndTextColor(color);
     }
 
     @Override

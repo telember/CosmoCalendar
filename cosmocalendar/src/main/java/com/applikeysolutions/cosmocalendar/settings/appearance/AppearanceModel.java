@@ -23,6 +23,11 @@ public class AppearanceModel implements AppearanceInterface {
     //Text color of selected days
     private int selectedDayTextColor;
 
+
+    private int selectedDayStartTextColor;
+
+    private int selectedDayEndTextColor;
+
     //Background color of selected days
     private int selectedDayBackgroundColor;
 
@@ -110,6 +115,16 @@ public class AppearanceModel implements AppearanceInterface {
     @Override
     public int getSelectedDayTextColor() {
         return selectedDayTextColor;
+    }
+
+    @Override
+    public int getSelectedDayStartTextColor() {
+        return selectedDayStartTextColor;
+    }
+
+    @Override
+    public int getSelectedDayEndTextColor() {
+        return selectedDayEndTextColor;
     }
 
     @Override
@@ -225,6 +240,16 @@ public class AppearanceModel implements AppearanceInterface {
     @Override
     public void setSelectedDayTextColor(int selectedDayTextColor) {
         this.selectedDayTextColor = selectedDayTextColor;
+    }
+
+    @Override
+    public void setSelectedDayStartTextColor(int color) {
+        this.selectedDayStartTextColor = color;
+    }
+
+    @Override
+    public void setSelectedDayEndTextColor(int color) {
+        this.selectedDayEndTextColor = color;
     }
 
     @Override

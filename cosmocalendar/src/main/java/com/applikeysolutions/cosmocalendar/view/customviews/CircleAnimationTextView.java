@@ -128,7 +128,7 @@ public class CircleAnimationTextView extends AppCompatTextView {
             createCirclePaint();
         }
 
-        final int diameter = getWidth() - DEFAULT_PADDING * 2;
+        int diameter = getWidth() - DEFAULT_PADDING * 2;
         final int diameterProgress = animationProgress * diameter / MAX_PROGRESS;
 
         setBackgroundColor(Color.TRANSPARENT);
@@ -192,20 +192,26 @@ public class CircleAnimationTextView extends AppCompatTextView {
     }
 
     public void setSelectionStateAndAnimate(SelectionState state, CalendarView calendarView, Day day) {
+
         isStateChanged(state);
+
         selectionState = state;
         this.calendarView = calendarView;
+
         day.setSelectionState(state);
         this.day = day;
 
         if (selectionState != null && calendarView != null) {
+
             switch (selectionState) {
                 case START_RANGE_DAY:
                     circleColor = calendarView.getSelectedDayBackgroundStartColor();
+                    setTextColor(this.calendarView.getSelectedDayStartTextColor());
                     break;
 
                 case END_RANGE_DAY:
                     circleColor = calendarView.getSelectedDayBackgroundEndColor();
+                    setTextColor(this.calendarView.getSelectedDayStartTextColor());
                     break;
 
                 case START_RANGE_DAY_WITHOUT_END:

@@ -6,12 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.applikeysolutions.cosmocalendar.model.Day;
 import com.applikeysolutions.cosmocalendar.selection.MultipleSelectionManager;
 import com.applikeysolutions.cosmocalendar.selection.criteria.BaseCriteria;
 import com.applikeysolutions.cosmocalendar.selection.criteria.WeekDayCriteria;
@@ -21,8 +23,12 @@ import com.applikeysolutions.cosmocalendar.selection.criteria.month.PreviousMont
 import com.applikeysolutions.cosmocalendar.utils.SelectionType;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DefaultCalendarActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
@@ -38,6 +44,15 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
     private MenuItem menuFridays;
     private MenuItem menuThreeMonth;
 
+    private String mDateInit = "2018-07-24";
+    private String mDateEnd = "2018-07-30";
+
+    private Day mDayInit;
+    private Day mDayEnd;
+
+    private DateFormat mDateFormat;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +60,28 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        initViews();
+        mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+
+            mDayInit = new Day(mDateFormat.parse(mDateInit));
+            mDayEnd = new Day(mDateFormat.parse(mDateEnd));
+
+            initViews(mDayInit, mDayEnd);
+
+        } catch (ParseException e) {
+            Log.d(DefaultCalendarActivity.class.getSimpleName(), e.getMessage());
+        }
         createCriterias();
     }
 
-    private void initViews() {
+    private void initViews(Day start, Day end) {
+
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
+        calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
+        calendarView.setSelectionType(SelectionType.RANGE);
+        calendarView.setSelectedDays(start, end);
+
         ((RadioGroup) findViewById(R.id.rg_orientation)).setOnCheckedChangeListener(this);
         ((RadioGroup) findViewById(R.id.rg_selection_type)).setOnCheckedChangeListener(this);
     }
@@ -187,6 +218,8 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
 
             case R.id.rb_range:
                 calendarView.setSelectionType(SelectionType.RANGE);
+                calendarView.setSelectedDays(mDayInit, mDayEnd);
+
                 menuFridays.setVisible(false);
                 menuThreeMonth.setVisible(false);
                 break;

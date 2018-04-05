@@ -10,7 +10,7 @@ public class SlowdownRecyclerView extends RecyclerView {
 
     // Change pow to control speed.
     // Bigger = faster. RecyclerView default is 5.
-    private static final int POW = 2;
+    private static final int POW = 5;
 
     private Interpolator interpolator;
 

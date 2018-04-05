@@ -20,6 +20,7 @@ class GravityDelegate {
     private boolean snapLastItem;
     private GravitySnapHelper.SnapListener listener;
     private boolean snapping;
+    
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

@@ -16,6 +16,10 @@ public interface AppearanceInterface {
 
     int getSelectedDayTextColor();
 
+    int getSelectedDayStartTextColor();
+
+    int getSelectedDayEndTextColor();
+
     int getSelectedDayBackgroundColor();
 
     int getSelectedDayBackgroundStartColor();
@@ -61,6 +65,9 @@ public interface AppearanceInterface {
     void setWeekDayTitleTextColor(int weekDayTitleTextColor);
 
     void setSelectedDayTextColor(int selectedDayTextColor);
+
+    void setSelectedDayStartTextColor(int color);
+    void setSelectedDayEndTextColor(int color);
 
     void setSelectedDayBackgroundColor(int selectedDayBackgroundColor);
 

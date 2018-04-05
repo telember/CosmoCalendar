@@ -28,6 +28,7 @@ public class Day {
     public Day(Date date) {
         this.calendar = DateUtils.getCalendar(date);
         this.current = DateUtils.isCurrentDate(date);
+
         this.selected = false;
     }
 
@@ -133,6 +134,14 @@ public class Day {
 
     public int getDayNumber() {
         return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getMonthNumber() {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getYearNumber() {
+        return calendar.get(Calendar.YEAR);
     }
 
     @Override
