@@ -22,7 +22,7 @@ public class DayOfWeekHolder extends BaseDayHolder {
     }
 
     public void bind(Day day) {
-        tvDay.setText(mDayOfWeekFormatter.format(day.getCalendar().getTime()));
+        tvDay.setText(mDayOfWeekFormatter.format(day.getCalendar().getTime()).charAt(0) + "");
         tvDay.setTextColor(calendarView.getWeekDayTitleTextColor());
     }
 }

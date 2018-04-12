@@ -268,6 +268,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      * VERTICAL - displaying above whole calendar
      */
     private void setDaysOfWeekTitles() {
+
         settingsManager.setShowDaysOfWeekTitle(settingsManager.getCalendarOrientation() != LinearLayoutManager.HORIZONTAL);
         settingsManager.setShowDaysOfWeek(settingsManager.getCalendarOrientation() == LinearLayoutManager.HORIZONTAL);
 
