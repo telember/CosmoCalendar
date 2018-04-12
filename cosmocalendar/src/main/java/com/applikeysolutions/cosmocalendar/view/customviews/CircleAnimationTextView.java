@@ -129,6 +129,9 @@ public class CircleAnimationTextView extends AppCompatTextView {
         }
 
         int diameter = getWidth() - DEFAULT_PADDING * 2;
+
+        // calculated diameter minus 20% of calculated diameter
+//        diameter = diameter - ((diameter * 20) / 100);
         final int diameterProgress = animationProgress * diameter / MAX_PROGRESS;
 
         setBackgroundColor(Color.TRANSPARENT);
