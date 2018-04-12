@@ -4,7 +4,7 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'cosmocalendar'
 
-    publishedGroupId = 'com.github.applikeysolutions'
+    publishedGroupId = 'com.github.kingxlayer'
     libraryName = 'Cosmocalendar'
     artifact = 'cosmocalendar'
 
