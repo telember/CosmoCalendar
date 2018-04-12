@@ -329,7 +329,6 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      */
     private void createBottomSelectionBar() {
         flBottomSelectionBar = new FrameLayout(getContext());
-//        flBottomSelectionBar.setLayoutTransition(new LayoutTransition());
         flBottomSelectionBar.setId(View.generateViewId());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.BELOW, rvMonths.getId());
@@ -411,9 +410,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
     private void createRecyclerView() {
 
-//        rvMonths = new SlowdownRecyclerView(getContext());
         rvMonths = new RecyclerView(getContext());
-//        rvMonths.addItemDecoration(new GridSpacingItemDecoration(1, 1, true, 0));
 
         rvMonths.setId(View.generateViewId());
         rvMonths.setHasFixedSize(true);
