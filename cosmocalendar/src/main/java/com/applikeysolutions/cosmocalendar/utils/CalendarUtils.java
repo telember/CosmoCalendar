@@ -73,23 +73,30 @@ public final class CalendarUtils {
 
         final Calendar calendar = DateUtils.getCalendar(firstDisplayedDay);
         final int startDayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
         do {
+
             daysOfTheWeek.add(new DayOfWeek(calendar.getTime()));
             DateUtils.addDay(calendar);
+
         } while (calendar.get(Calendar.DAY_OF_WEEK) != startDayOfTheWeek);
+
         return daysOfTheWeek;
     }
 
     public static List<String> createWeekDayTitles(int firstDayOfWeek) {
+
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DAY_NAME_FORMAT, Locale.getDefault());
         final List<String> titles = new ArrayList<>();
 
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_WEEK, firstDayOfWeek);
+
         do {
             titles.add(sdf.format(calendar.getTime()));
             DateUtils.addDay(calendar);
         } while (calendar.get(Calendar.DAY_OF_WEEK) != firstDayOfWeek);
+
         return titles;
     }
 

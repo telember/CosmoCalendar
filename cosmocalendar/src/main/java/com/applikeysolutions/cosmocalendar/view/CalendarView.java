@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -75,7 +76,8 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     private OnRangeDaySelectedListener mDaySelectionListener;
 
     //Recycler
-    private SlowdownRecyclerView rvMonths;
+//    private SlowdownRecyclerView rvMonths;
+    private RecyclerView rvMonths;
     private MonthAdapter monthAdapter;
 
     //Bottom selection bar
@@ -283,24 +285,33 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      * Creates days of week title above calendar
      */
     private void createDaysOfWeekTitle() {
+
         boolean isTitleAlreadyAdded = llDaysOfWeekTitles != null;
+
         if (!isTitleAlreadyAdded) {
+
             llDaysOfWeekTitles = new LinearLayout(getContext());
+
             llDaysOfWeekTitles.setId(View.generateViewId());
             llDaysOfWeekTitles.setOrientation(LinearLayout.HORIZONTAL);
             llDaysOfWeekTitles.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
         } else {
+
             llDaysOfWeekTitles.removeAllViews();
         }
 
         //creating days of week views
         LinearLayout.LayoutParams textViewParam = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         textViewParam.weight = 1;
+
         for (String title : CalendarUtils.createWeekDayTitles(settingsManager.getFirstDayOfWeek())) {
+
             SquareTextView tvDayTitle = new SquareTextView(getContext());
             tvDayTitle.setText(title);
             tvDayTitle.setLayoutParams(textViewParam);
             tvDayTitle.setGravity(Gravity.CENTER);
+
             llDaysOfWeekTitles.addView(tvDayTitle);
         }
 
@@ -399,8 +410,9 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
     private void createRecyclerView() {
 
-        rvMonths = new SlowdownRecyclerView(getContext());
-        rvMonths.addItemDecoration(new GridSpacingItemDecoration(1, 1, true, 0));
+//        rvMonths = new SlowdownRecyclerView(getContext());
+        rvMonths = new RecyclerView(getContext());
+//        rvMonths.addItemDecoration(new GridSpacingItemDecoration(1, 1, true, 0));
 
         rvMonths.setId(View.generateViewId());
         rvMonths.setHasFixedSize(true);
@@ -408,8 +420,10 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
         ((SimpleItemAnimator) rvMonths.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         params.addRule(RelativeLayout.BELOW, llDaysOfWeekTitles.getId());
+
         rvMonths.setLayoutParams(params);
 
         rvMonths.setLayoutManager(new GridLayoutManager(getContext(), 1, settingsManager.getCalendarOrientation(), false));
