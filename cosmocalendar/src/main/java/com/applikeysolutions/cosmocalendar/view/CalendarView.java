@@ -418,7 +418,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
         ((SimpleItemAnimator) rvMonths.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         params.addRule(RelativeLayout.BELOW, llDaysOfWeekTitles.getId());
 
@@ -617,6 +617,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      * @return
      */
     public List<Day> getSelectedDays() {
+
         List<Day> selectedDays = new ArrayList<>();
         for(Iterator<Month> monthIterator = monthAdapter.getData().iterator(); monthIterator.hasNext();) {
             Month month = monthIterator.next();
@@ -679,7 +680,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         displaySelectedDays();
 
         if (mDaySelectionListener != null) {
-            mDaySelectionListener.onDaySelected(selectedDays);
+            mDaySelectionListener.onDaySelected(getSelectedDates());
         }
     }
 
@@ -687,6 +688,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      * Displays selected days
      */
     private void displaySelectedDays() {
+
         switch (settingsManager.getSelectionType()) {
             case SelectionType.MULTIPLE:
                 displaySelectedDaysMultiple();

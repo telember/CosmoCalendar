@@ -1,7 +1,6 @@
 package com.applikeysolutions.cosmocalendar.view.delegate;
 
-import com.applikeysolutions.cosmocalendar.model.Day;
-
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -10,6 +9,6 @@ import java.util.List;
 
 public interface OnRangeDaySelectedListener {
 
-    void onDaySelected(List<Day> days);
+    void onDaySelected(List<Calendar> days);
 
 }
