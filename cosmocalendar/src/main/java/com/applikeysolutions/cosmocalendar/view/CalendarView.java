@@ -16,19 +16,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.text.Selection;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.applikeysolutions.cosmocalendar.selection.NoneSelectionManager;
 import com.applikeysolutions.cosmocalendar.FetchMonthsAsyncTask;
@@ -55,10 +51,10 @@ import com.applikeysolutions.cosmocalendar.utils.CalendarUtils;
 import com.applikeysolutions.cosmocalendar.utils.SelectionType;
 import com.applikeysolutions.cosmocalendar.utils.WeekDay;
 import com.applikeysolutions.cosmocalendar.utils.snap.GravitySnapHelper;
-import com.applikeysolutions.cosmocalendar.view.customviews.CircleAnimationTextView;
 import com.applikeysolutions.cosmocalendar.view.customviews.SquareTextView;
 import com.applikeysolutions.cosmocalendar.view.delegate.MonthDelegate;
 import com.applikeysolutions.cosmocalendar.view.delegate.OnRangeDaySelectedListener;
+import com.applikeysolutions.cosmocalendar.view.delegate.OnSingleDaySelectedDelegate;
 import com.applikeysolutions.customizablecalendar.R;
 
 import java.util.ArrayList;
@@ -75,6 +71,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
     // Day selection listener
     private OnRangeDaySelectedListener mDaySelectionListener;
+    private OnSingleDaySelectedDelegate mSingleSelectionListener;
 
     //Recycler
 //    private SlowdownRecyclerView rvMonths;
@@ -138,8 +135,12 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         }
     }
 
-    public void setDaySelectionDelegate(OnRangeDaySelectedListener listener) {
+    public void setRangeSelectionDelegate(OnRangeDaySelectedListener listener) {
         mDaySelectionListener = listener;
+    }
+
+    public void setSingleDaySelectionDelegate(OnSingleDaySelectedDelegate listener) {
+        mSingleSelectionListener = listener;
     }
 
     private void handleAttributes(AttributeSet attrs, int defStyle, int defStyleRes) {
@@ -684,11 +685,14 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
     @Override
     public void onDaySelected() {
+
         selectedDays = getSelectedDays();
         displaySelectedDays();
 
         if (mDaySelectionListener != null) {
             mDaySelectionListener.onDaySelected(getSelectedDates());
+        } else if (mSingleSelectionListener != null) {
+            mSingleSelectionListener.onDaySelected(getSelectedDates().get(0));
         }
     }
 
