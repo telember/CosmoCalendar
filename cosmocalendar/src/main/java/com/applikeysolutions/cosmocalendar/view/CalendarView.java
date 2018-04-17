@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.Selection;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -172,13 +173,14 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         int weekendDayTextColor = typedArray.getColor(R.styleable.CalendarView_weekendDayTextColor, ContextCompat.getColor(getContext(), R.color.default_weekend_day_text_color));
         int weekDayTitleTextColor = typedArray.getColor(R.styleable.CalendarView_weekDayTitleTextColor, ContextCompat.getColor(getContext(), R.color.default_week_day_title_text_color));
 
-        int selectedDayTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_text_color));
+        int selectedDayTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_start_text_color));
         int selectedDayStartTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayStartTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_start_text_color));
         int selectedDayEndTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayEndTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_end_text_color));
 
-        int selectedDayBackgroundColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_color));
+        int selectedDayBackgroundColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_start_color));
         int selectedDayBackgroundStartColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundStartColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_start_color));
         int selectedDayBackgroundEndColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundEndColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_end_color));
+
         int currentDayTextColor = typedArray.getColor(R.styleable.CalendarView_currentDayTextColor, ContextCompat.getColor(getContext(), R.color.default_day_text_color));
         int currentDayIconRes = typedArray.getResourceId(R.styleable.CalendarView_currentDayIconRes, R.drawable.ic_triangle_green);
         int currentDaySelectedIconRes = typedArray.getResourceId(R.styleable.CalendarView_currentDaySelectedIconRes, R.drawable.ic_triangle_white);
@@ -197,6 +199,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         settingsManager.setDayTextColor(dayTextColor);
         settingsManager.setWeekendDayTextColor(weekendDayTextColor);
         settingsManager.setWeekDayTitleTextColor(weekDayTitleTextColor);
+
         settingsManager.setSelectedDayTextColor(selectedDayTextColor);
 
         settingsManager.setSelectedDayBackgroundColor(selectedDayBackgroundColor);
@@ -603,12 +606,17 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         update();
     }
 
-    public void setSelectedDays(Day start, Day end) {
+    public void setSelectedDaysRange(Day start, Day end) {
         selectionManager.setInitialPair(start, end);
 
-        setFirstSelectedMonthPosition();
+        setFirstSelectedMonthPosition(SelectionType.RANGE);
 
         displaySelectedDays();
+    }
+
+    public void setSelectedDaySingle(Day mDay) {
+        selectionManager.setInitialDay(mDay);
+        setFirstSelectedMonthPosition(SelectionType.SINGLE);
     }
 
     /**
@@ -721,33 +729,6 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
             Pair<Day, Day> days = ((RangeSelectionManager) selectionManager).getDays();
 
             llRangeSelection.setVisibility(GONE);
-
-//            if (days != null) {
-//                llRangeSelection.setVisibility(VISIBLE);
-//                TextView tvStartRangeTitle = (TextView) llRangeSelection.findViewById(R.id.tv_range_start_date);
-//                tvStartRangeTitle.setText(CalendarUtils.getYearNameTitle(days.first));
-//                tvStartRangeTitle.setTextColor(getSelectionBarMonthTextColor());
-//
-//                TextView tvEndRangeTitle = (TextView) llRangeSelection.findViewById(R.id.tv_range_end_date);
-//                tvEndRangeTitle.setText(CalendarUtils.getYearNameTitle(days.second));
-//                tvEndRangeTitle.setTextColor(getSelectionBarMonthTextColor());
-//
-//                CircleAnimationTextView catvStart = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_start);
-//                catvStart.setText(String.valueOf(days.first.getDayNumber()));
-//                catvStart.setTextColor(getSelectedDayStartTextColor());
-//                catvStart.showAsStartCircle(this, true);
-//
-//
-//                CircleAnimationTextView catvEnd = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_end);
-//                catvEnd.setText(String.valueOf(days.second.getDayNumber()));
-//                catvEnd.setTextColor(getSelectedDayEndTextColor());
-//                catvEnd.showAsEndCircle(this, true);
-//
-//                CircleAnimationTextView catvMiddle = (CircleAnimationTextView) llRangeSelection.findViewById(R.id.catv_middle);
-//                catvMiddle.showAsRange(this);
-//            } else {
-//                llRangeSelection.setVisibility(GONE);
-//            }
         }
     }
 
@@ -776,24 +757,38 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         llRangeSelection.setVisibility(needToShowSelectedDaysRange() ? View.VISIBLE : View.GONE);
     }
 
-    private void setFirstSelectedMonthPosition() {
+    private void setFirstSelectedMonthPosition(int type) {
 
         int mPosition = 0;
         int i = 0;
 
-        RangeSelectionManager mSelectionManager = (RangeSelectionManager) selectionManager;
+        if (type == SelectionType.RANGE) {
 
-        for (Month mMonth : monthAdapter.getData()) {
+            RangeSelectionManager mSelectionManager = (RangeSelectionManager) selectionManager;
 
-            Log.d(CalendarView.class.getSimpleName(), mMonth.getFirstDay().getDayNumber() + " - " + mMonth.getFirstDay().getMonthNumber() + " - " + mMonth.getFirstDay().getYearNumber());
-            Log.d(CalendarView.class.getSimpleName(), mSelectionManager.getDays().first.getDayNumber() + " - " + mSelectionManager.getDays().first.getMonthNumber() + " - " + mSelectionManager.getDays().first.getYearNumber());
+            for (Month mMonth : monthAdapter.getData()) {
 
-            if ( (mMonth.getFirstDay().getYearNumber() == mSelectionManager.getDays().first.getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getDays().first.getMonthNumber())) {
-                mPosition = i;
-                break;
+                if ( (mMonth.getFirstDay().getYearNumber() == mSelectionManager.getDays().first.getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getDays().first.getMonthNumber())) {
+                    mPosition = i;
+                    break;
+                }
+
+                i++;
             }
 
-            i++;
+        } else {
+
+            SingleSelectionManager mSelectionManager = (SingleSelectionManager) selectionManager;
+
+            for (Month mMonth : monthAdapter.getData()) {
+
+                if ( (mMonth.getFirstDay().getYearNumber() == mSelectionManager.getInitialDay().getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getInitialDay().getMonthNumber())) {
+                    mPosition = i;
+                    break;
+                }
+
+                i++;
+            }
         }
 
         rvMonths.scrollToPosition(mPosition);

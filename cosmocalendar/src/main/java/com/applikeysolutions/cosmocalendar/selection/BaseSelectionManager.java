@@ -10,6 +10,8 @@ public abstract class BaseSelectionManager {
 
     public abstract void setInitialPair(Day start, Day end);
 
+    public abstract void setInitialDay(Day mDay);
+
     public abstract void toggleDay(@NonNull Day day);
 
     public abstract boolean isDaySelected(@NonNull Day day);

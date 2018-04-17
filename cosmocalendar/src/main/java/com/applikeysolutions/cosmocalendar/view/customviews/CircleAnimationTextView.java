@@ -45,7 +45,7 @@ public class CircleAnimationTextView extends AppCompatTextView {
 
     public static final int DEFAULT_PADDING = 10;
     public static final int MAX_PROGRESS = 100;
-    public static final long SELECTION_ANIMATION_DURATION = 300;
+    public static final long SELECTION_ANIMATION_DURATION = 100;
 
     public CircleAnimationTextView(Context context) {
         super(context);

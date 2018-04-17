@@ -18,6 +18,15 @@ public class SingleSelectionManager extends BaseSelectionManager {
     }
 
     @Override
+    public void setInitialDay(Day mDay) {
+        this.day = mDay;
+    }
+
+    public Day getInitialDay() {
+        return this.day;
+    }
+
+    @Override
     public void toggleDay(@NonNull Day day) {
         this.day = day;
         onDaySelectedListener.onDaySelected();

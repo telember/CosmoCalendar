@@ -16,6 +16,11 @@ public class NoneSelectionManager extends BaseSelectionManager {
     }
 
     @Override
+    public void setInitialDay(Day mDay) {
+
+    }
+
+    @Override
     public void toggleDay(@NonNull Day day) {
 
     }

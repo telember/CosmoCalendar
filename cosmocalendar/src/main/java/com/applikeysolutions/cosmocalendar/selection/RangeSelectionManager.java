@@ -25,6 +25,11 @@ public class RangeSelectionManager extends BaseSelectionManager {
     }
 
     @Override
+    public void setInitialDay(Day mDay) {
+
+    }
+
+    @Override
     public void toggleDay(@NonNull Day day) {
         if (days == null && tempDay == null || tempDay == null) {
             tempDay = day;

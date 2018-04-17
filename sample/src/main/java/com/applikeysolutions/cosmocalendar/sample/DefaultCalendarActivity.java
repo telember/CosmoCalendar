@@ -67,7 +67,8 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
             mDayInit = new Day(mDateFormat.parse(mDateInit));
             mDayEnd = new Day(mDateFormat.parse(mDateEnd));
 
-            initViews(mDayInit, mDayEnd);
+            //initViews(mDayInit, mDayEnd);
+            initViews(mDayInit);
 
         } catch (ParseException e) {
             Log.d(DefaultCalendarActivity.class.getSimpleName(), e.getMessage());
@@ -75,12 +76,26 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
         createCriterias();
     }
 
+    // single
+    private void initViews(Day mDay) {
+
+        calendarView = (CalendarView) findViewById(R.id.calendar_view);
+        calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
+        calendarView.setSelectionType(SelectionType.SINGLE);
+        calendarView.setSelectedDaySingle(mDay);
+
+        ((RadioGroup) findViewById(R.id.rg_orientation)).setOnCheckedChangeListener(this);
+        ((RadioGroup) findViewById(R.id.rg_selection_type)).setOnCheckedChangeListener(this);
+
+    }
+
+    //range
     private void initViews(Day start, Day end) {
 
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
         calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
         calendarView.setSelectionType(SelectionType.RANGE);
-        calendarView.setSelectedDays(start, end);
+        calendarView.setSelectedDaysRange(start, end);
 
         ((RadioGroup) findViewById(R.id.rg_orientation)).setOnCheckedChangeListener(this);
         ((RadioGroup) findViewById(R.id.rg_selection_type)).setOnCheckedChangeListener(this);
@@ -206,6 +221,7 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
 
             case R.id.rb_single:
                 calendarView.setSelectionType(SelectionType.SINGLE);
+                calendarView.setSelectedDaySingle(mDayInit);
                 menuFridays.setVisible(false);
                 menuThreeMonth.setVisible(false);
                 break;
@@ -218,7 +234,7 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
 
             case R.id.rb_range:
                 calendarView.setSelectionType(SelectionType.RANGE);
-                calendarView.setSelectedDays(mDayInit, mDayEnd);
+                calendarView.setSelectedDaysRange(mDayInit, mDayEnd);
 
                 menuFridays.setVisible(false);
                 menuThreeMonth.setVisible(false);

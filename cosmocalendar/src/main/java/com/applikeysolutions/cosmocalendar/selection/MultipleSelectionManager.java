@@ -36,6 +36,11 @@ public class MultipleSelectionManager extends BaseCriteriaSelectionManager {
     }
 
     @Override
+    public void setInitialDay(Day mDay) {
+
+    }
+
+    @Override
     public void toggleDay(@NonNull Day day) {
         if (days.contains(day)) {
             days.remove(day);
