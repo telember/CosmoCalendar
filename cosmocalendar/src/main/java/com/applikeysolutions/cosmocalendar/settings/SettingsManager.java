@@ -103,6 +103,11 @@ public class SettingsManager implements AppearanceInterface, DateInterface, Cale
     }
 
     @Override
+    public int getSelectedSingleDayBackgroundColor() {
+        return appearanceModel.getSelectedSingleDayBackgroundColor();
+    }
+
+    @Override
     public int getSelectedDayBackgroundStartColor() {
         return appearanceModel.getSelectedDayBackgroundStartColor();
     }
@@ -225,6 +230,11 @@ public class SettingsManager implements AppearanceInterface, DateInterface, Cale
     @Override
     public void setSelectedDayBackgroundColor(int selectedDayBackgroundColor) {
         appearanceModel.setSelectedDayBackgroundColor(selectedDayBackgroundColor);
+    }
+
+    @Override
+    public void setSelectedSingleDayBackgroundColor(int selectedSingleDayBackgroundColor) {
+        appearanceModel.setSelectedSingleDayBackgroundColor(selectedSingleDayBackgroundColor);
     }
 
     @Override

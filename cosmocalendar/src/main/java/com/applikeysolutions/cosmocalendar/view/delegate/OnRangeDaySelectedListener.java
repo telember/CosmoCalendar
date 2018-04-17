@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface OnRangeDaySelectedListener {
 
-    void onDaySelected(List<Calendar> days);
+    void onRangeDaySelected(List<Calendar> days);
 
 }

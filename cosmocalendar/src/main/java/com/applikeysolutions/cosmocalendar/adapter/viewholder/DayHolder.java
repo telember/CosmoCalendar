@@ -24,10 +24,12 @@ public class DayHolder extends BaseDayHolder {
     }
 
     public void bind(Day day, BaseSelectionManager selectionManager) {
+
         this.selectionManager = selectionManager;
         ctvDay.setText(String.valueOf(day.getDayNumber()));
 
         boolean isSelected = selectionManager.isDaySelected(day);
+
         if (isSelected && !day.isDisabled()) {
             select(day);
         } else {
@@ -118,12 +120,18 @@ public class DayHolder extends BaseDayHolder {
 
                 ctvDay.showAsSingleCircle(calendarView);
 
+            } else if (!day.isSelectionCircleDrawed() && state == SelectionState.SINGLE_DAY) {
+
+                ctvDay.showAsSingleSelectedDayCircle(calendarView);
+                ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
+
             } else  if (state == SelectionState.START_RANGE_DAY_WITHOUT_END) {
 
                 if (day.isSelectionCircleDrawed()) {
                     ctvDay.showAsStartCircleWithouEnd(calendarView, false);
                 } else {
                     ctvDay.setSelectionStateAndAnimate(state, calendarView, day);
+                    ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());
                 }
 
                 ctvDay.setTextColor(calendarView.getSelectedDayStartTextColor());

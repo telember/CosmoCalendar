@@ -70,7 +70,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     private List<Day> selectedDays;
 
     // Day selection listener
-    private OnRangeDaySelectedListener mDaySelectionListener;
+    private OnRangeDaySelectedListener mRangeDaySelectionListener;
     private OnSingleDaySelectedDelegate mSingleSelectionListener;
 
     //Recycler
@@ -136,7 +136,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     }
 
     public void setRangeSelectionDelegate(OnRangeDaySelectedListener listener) {
-        mDaySelectionListener = listener;
+        mRangeDaySelectionListener = listener;
     }
 
     public void setSingleDaySelectionDelegate(OnSingleDaySelectedDelegate listener) {
@@ -174,11 +174,12 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         int weekendDayTextColor = typedArray.getColor(R.styleable.CalendarView_weekendDayTextColor, ContextCompat.getColor(getContext(), R.color.default_weekend_day_text_color));
         int weekDayTitleTextColor = typedArray.getColor(R.styleable.CalendarView_weekDayTitleTextColor, ContextCompat.getColor(getContext(), R.color.default_week_day_title_text_color));
 
-        int selectedDayTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_start_text_color));
+        int selectedDayTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_text_color));
         int selectedDayStartTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayStartTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_start_text_color));
         int selectedDayEndTextColor = typedArray.getColor(R.styleable.CalendarView_selectedDayEndTextColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_end_text_color));
 
-        int selectedDayBackgroundColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_start_color));
+        int selectedDayBackgroundColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_color));
+        int selectedSingleDayBackgroundColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundColor, ContextCompat.getColor(getContext(), R.color.default_selected_single_day_background_color));
         int selectedDayBackgroundStartColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundStartColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_start_color));
         int selectedDayBackgroundEndColor = typedArray.getColor(R.styleable.CalendarView_selectedDayBackgroundEndColor, ContextCompat.getColor(getContext(), R.color.default_selected_day_background_end_color));
 
@@ -204,6 +205,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         settingsManager.setSelectedDayTextColor(selectedDayTextColor);
 
         settingsManager.setSelectedDayBackgroundColor(selectedDayBackgroundColor);
+        settingsManager.setSelectedSingleDayBackgroundColor(selectedSingleDayBackgroundColor);
         settingsManager.setSelectedDayStartTextColor(selectedDayStartTextColor);
         settingsManager.setSelectedDayEndTextColor(selectedDayEndTextColor);
 
@@ -689,10 +691,11 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         selectedDays = getSelectedDays();
         displaySelectedDays();
 
-        if (mDaySelectionListener != null) {
-            mDaySelectionListener.onDaySelected(getSelectedDates());
+        if (mRangeDaySelectionListener != null) {
+            mRangeDaySelectionListener.onRangeDaySelected(getSelectedDates());
+
         } else if (mSingleSelectionListener != null) {
-            mSingleSelectionListener.onDaySelected(getSelectedDates().get(0));
+            mSingleSelectionListener.onSingleDaySelected(getSelectedDates().get(0));
         }
     }
 
@@ -872,6 +875,11 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     }
 
     @Override
+    public int getSelectedSingleDayBackgroundColor() {
+        return settingsManager.getSelectedSingleDayBackgroundColor();
+    }
+
+    @Override
     public int getSelectedDayBackgroundStartColor() {
         return settingsManager.getSelectedDayBackgroundStartColor();
     }
@@ -1005,6 +1013,11 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     public void setSelectedDayBackgroundColor(int selectedDayBackgroundColor) {
         settingsManager.setSelectedDayBackgroundColor(selectedDayBackgroundColor);
         update();
+    }
+
+    @Override
+    public void setSelectedSingleDayBackgroundColor(int selectedSingleDayBackgroundColor) {
+        settingsManager.setSelectedSingleDayBackgroundColor(selectedSingleDayBackgroundColor);
     }
 
     @Override

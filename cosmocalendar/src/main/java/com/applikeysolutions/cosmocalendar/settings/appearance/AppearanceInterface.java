@@ -22,6 +22,8 @@ public interface AppearanceInterface {
 
     int getSelectedDayBackgroundColor();
 
+    int getSelectedSingleDayBackgroundColor();
+
     int getSelectedDayBackgroundStartColor();
 
     int getSelectedDayBackgroundEndColor();
@@ -70,6 +72,8 @@ public interface AppearanceInterface {
     void setSelectedDayEndTextColor(int color);
 
     void setSelectedDayBackgroundColor(int selectedDayBackgroundColor);
+
+    void setSelectedSingleDayBackgroundColor(int selectedSingleDayBackgroundColor);
 
     void setSelectedDayBackgroundStartColor(int selectedDayBackgroundStartColor);
 

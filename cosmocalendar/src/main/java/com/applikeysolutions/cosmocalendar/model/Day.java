@@ -2,6 +2,7 @@ package com.applikeysolutions.cosmocalendar.model;
 
 import com.applikeysolutions.cosmocalendar.selection.SelectionState;
 import com.applikeysolutions.cosmocalendar.utils.DateUtils;
+import com.applikeysolutions.cosmocalendar.utils.SelectionType;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -94,6 +95,10 @@ public class Day {
 
     public void setSelectionCircleDrawed(boolean selectionCircleDrawed) {
         isSelectionCircleDrawed = selectionCircleDrawed;
+    }
+
+    public boolean isSingleSelectionDay() {
+        return selectionState == SelectionState.SINGLE_DAY;
     }
 
     public SelectionState getSelectionState() {

@@ -321,6 +321,12 @@ public class CircleAnimationTextView extends AppCompatTextView {
         showAsCircle(calendarView.getSelectedDayBackgroundColor());
     }
 
+    public void showAsSingleSelectedDayCircle(CalendarView calendarView) {
+        clearVariables();
+        selectionState = SelectionState.SINGLE_DAY;
+        showAsCircle(calendarView.getSelectedSingleDayBackgroundColor());
+    }
+
     public void showAsStartCircle(CalendarView calendarView, boolean animate) {
         if (animate) {
             clearVariables();

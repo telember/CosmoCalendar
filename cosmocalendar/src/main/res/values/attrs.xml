@@ -34,9 +34,11 @@
         <attr name="selectionBarMonthTextColor" format="color" />
 
         <attr name="selectedDayTextColor" format="color" />
+        <attr name="selectedSingleDayTextColor" format="color" />
         <attr name="selectedDayStartTextColor" format="color" />
         <attr name="selectedDayEndTextColor" format="color" />
         <attr name="selectedDayBackgroundColor" format="color" />
+        <attr name="selectedSingleDayBackgroundColor" format="color" />
         <attr name="selectedDayBackgroundStartColor" format="color" />
         <attr name="selectedDayBackgroundEndColor" format="color" />
 

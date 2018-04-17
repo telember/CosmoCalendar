@@ -31,6 +31,8 @@ public class AppearanceModel implements AppearanceInterface {
     //Background color of selected days
     private int selectedDayBackgroundColor;
 
+    private int selectedSingleDayBackgroundColor;
+
     //Background color of START day from selected range
     private int selectedDayBackgroundStartColor;
 
@@ -130,6 +132,11 @@ public class AppearanceModel implements AppearanceInterface {
     @Override
     public int getSelectedDayBackgroundColor() {
         return selectedDayBackgroundColor;
+    }
+
+    @Override
+    public int getSelectedSingleDayBackgroundColor() {
+        return selectedSingleDayBackgroundColor;
     }
 
     @Override
@@ -255,6 +262,11 @@ public class AppearanceModel implements AppearanceInterface {
     @Override
     public void setSelectedDayBackgroundColor(int selectedDayBackgroundColor) {
         this.selectedDayBackgroundColor = selectedDayBackgroundColor;
+    }
+
+    @Override
+    public void setSelectedSingleDayBackgroundColor(int selectedSingleDayBackgroundColor) {
+        this.selectedSingleDayBackgroundColor = selectedSingleDayBackgroundColor;
     }
 
     @Override

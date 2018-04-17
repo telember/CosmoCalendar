@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
 import com.applikeysolutions.cosmocalendar.selection.MultipleSelectionManager;
+import com.applikeysolutions.cosmocalendar.selection.SelectionState;
 import com.applikeysolutions.cosmocalendar.selection.criteria.BaseCriteria;
 import com.applikeysolutions.cosmocalendar.selection.criteria.WeekDayCriteria;
 import com.applikeysolutions.cosmocalendar.selection.criteria.month.CurrentMonthCriteria;
@@ -22,6 +23,8 @@ import com.applikeysolutions.cosmocalendar.selection.criteria.month.NextMonthCri
 import com.applikeysolutions.cosmocalendar.selection.criteria.month.PreviousMonthCriteria;
 import com.applikeysolutions.cosmocalendar.utils.SelectionType;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
+import com.applikeysolutions.cosmocalendar.view.delegate.OnRangeDaySelectedListener;
+import com.applikeysolutions.cosmocalendar.view.delegate.OnSingleDaySelectedDelegate;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,7 +34,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class DefaultCalendarActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
+public class DefaultCalendarActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, OnRangeDaySelectedListener, OnSingleDaySelectedDelegate {
+
+    public static final String TAG = DefaultCalendarActivity.class.getSimpleName();
 
     private CalendarView calendarView;
 
@@ -79,10 +84,12 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
     // single
     private void initViews(Day mDay) {
 
+        mDay.setSelectionState(SelectionState.SINGLE_DAY);
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
         calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
         calendarView.setSelectionType(SelectionType.SINGLE);
         calendarView.setSelectedDaySingle(mDay);
+        calendarView.setSingleDaySelectionDelegate(this);
 
         ((RadioGroup) findViewById(R.id.rg_orientation)).setOnCheckedChangeListener(this);
         ((RadioGroup) findViewById(R.id.rg_selection_type)).setOnCheckedChangeListener(this);
@@ -245,6 +252,20 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
                 menuFridays.setVisible(false);
                 menuThreeMonth.setVisible(false);
                 break;
+        }
+    }
+
+    @Override
+    public void onSingleDaySelected(Calendar day) {
+        Log.d(TAG, "Single day selected: " + day.getTime());
+    }
+
+    @Override
+    public void onRangeDaySelected(List<Calendar> days) {
+        Log.d(TAG, "Range days selected...");
+
+        for (Calendar calendar : days) {
+            Log.d(TAG, calendar.getTime() + "");
         }
     }
 }
