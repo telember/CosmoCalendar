@@ -1,7 +1,7 @@
 package com.applikeysolutions.cosmocalendar.settings;
 
-import android.support.v7.widget.LinearLayoutManager;
 
+import android.support.v7.widget.LinearLayoutManager;
 import com.applikeysolutions.cosmocalendar.settings.appearance.AppearanceInterface;
 import com.applikeysolutions.cosmocalendar.settings.appearance.AppearanceModel;
 import com.applikeysolutions.cosmocalendar.settings.appearance.ConnectedDayIconPosition;
@@ -283,6 +283,17 @@ public class SettingsManager implements AppearanceInterface, DateInterface, Cale
     }
 
     @Override
+    public Calendar getMinDate() {
+        return calendarListsModel.getMinDate();
+    }
+
+    @Override
+    public Calendar getMaxDate() {
+        return calendarListsModel.getMaxDate();
+    }
+
+
+    @Override
     public void setDisabledDayTextColor(int disabledDayTextColor) {
         appearanceModel.setDisabledDayTextColor(disabledDayTextColor);
     }
@@ -330,6 +341,16 @@ public class SettingsManager implements AppearanceInterface, DateInterface, Cale
     @Override
     public DisabledDaysCriteria getDisabledDaysCriteria() {
         return calendarListsModel.getDisabledDaysCriteria();
+    }
+
+    @Override
+    public void setMinDate(Calendar minDate) {
+        calendarListsModel.setMinDate(minDate);
+    }
+
+    @Override
+    public void setMaxDate(Calendar maxDate) {
+        calendarListsModel.setMaxDate(maxDate);
     }
 
     @Override
