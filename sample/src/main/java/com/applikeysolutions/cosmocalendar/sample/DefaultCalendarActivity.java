@@ -85,7 +85,10 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
     private void initViews(Day mDay) {
 
         mDay.setSelectionState(SelectionState.SINGLE_DAY);
+
+
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
+        calendarView.setMinDate(Calendar.getInstance());
         calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
         calendarView.setSelectionType(SelectionType.SINGLE);
         calendarView.setSelectedDaySingle(mDay);

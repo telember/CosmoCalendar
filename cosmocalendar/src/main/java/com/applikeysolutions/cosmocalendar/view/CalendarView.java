@@ -26,20 +26,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.applikeysolutions.cosmocalendar.selection.NoneSelectionManager;
 import com.applikeysolutions.cosmocalendar.FetchMonthsAsyncTask;
 import com.applikeysolutions.cosmocalendar.adapter.MonthAdapter;
 import com.applikeysolutions.cosmocalendar.listeners.OnMonthChangeListener;
-import com.applikeysolutions.cosmocalendar.selection.selectionbar.SelectionBarItem;
-import com.applikeysolutions.cosmocalendar.settings.SettingsManager;
 import com.applikeysolutions.cosmocalendar.model.Day;
 import com.applikeysolutions.cosmocalendar.model.Month;
 import com.applikeysolutions.cosmocalendar.selection.BaseSelectionManager;
 import com.applikeysolutions.cosmocalendar.selection.MultipleSelectionManager;
+import com.applikeysolutions.cosmocalendar.selection.NoneSelectionManager;
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager;
 import com.applikeysolutions.cosmocalendar.selection.selectionbar.MultipleSelectionBarAdapter;
+import com.applikeysolutions.cosmocalendar.selection.selectionbar.SelectionBarItem;
+import com.applikeysolutions.cosmocalendar.settings.SettingsManager;
 import com.applikeysolutions.cosmocalendar.settings.appearance.AppearanceInterface;
 import com.applikeysolutions.cosmocalendar.settings.date.DateInterface;
 import com.applikeysolutions.cosmocalendar.settings.lists.CalendarListsInterface;
@@ -106,9 +106,9 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     private FetchMonthsAsyncTask asyncTask;
 
     public CalendarView(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
+
 
     public CalendarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -130,7 +130,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        if(asyncTask != null && !asyncTask.isCancelled()){
+        if (asyncTask != null && !asyncTask.isCancelled()) {
             asyncTask.cancel(false);
         }
     }
@@ -299,7 +299,15 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
             llDaysOfWeekTitles = new LinearLayout(getContext());
 
-            llDaysOfWeekTitles.setId(View.generateViewId());
+            int id = llDaysOfWeekTitles.getId();
+            // generates an id if it's missing
+            if (id == View.NO_ID) {
+                if (Build.VERSION.SDK_INT < 17)
+                    id = llDaysOfWeekTitles.hashCode();
+                else
+                    id = View.generateViewId();
+                llDaysOfWeekTitles.setId(id);
+            }
             llDaysOfWeekTitles.setOrientation(LinearLayout.HORIZONTAL);
             llDaysOfWeekTitles.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
@@ -335,7 +343,15 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      */
     private void createBottomSelectionBar() {
         flBottomSelectionBar = new FrameLayout(getContext());
-        flBottomSelectionBar.setId(View.generateViewId());
+        int id = flBottomSelectionBar.getId();
+        // generates an id if it's missing
+        if (id == View.NO_ID) {
+            if (Build.VERSION.SDK_INT < 17)
+                id = flBottomSelectionBar.hashCode();
+            else
+                id = View.generateViewId();
+            flBottomSelectionBar.setId(id);
+        }
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.BELOW, rvMonths.getId());
         flBottomSelectionBar.setLayoutParams(params);
@@ -353,7 +369,17 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
      */
     private void createMultipleSelectionBarRecycler() {
         rvMultipleSelectedList = new RecyclerView(getContext());
-        rvMultipleSelectedList.setId(View.generateViewId());
+
+        int id = rvMultipleSelectedList.getId();
+        // generates an id if it's missing
+        if (id == View.NO_ID) {
+            if (Build.VERSION.SDK_INT < 17)
+                id = rvMultipleSelectedList.hashCode();
+            else
+                id = View.generateViewId();
+            rvMultipleSelectedList.setId(id);
+        }
+
         rvMultipleSelectedList.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         rvMultipleSelectedList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         multipleSelectionBarAdapter = new MultipleSelectionBarAdapter(this, this);
@@ -415,10 +441,16 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     }
 
     private void createRecyclerView() {
-
         rvMonths = new RecyclerView(getContext());
-
-        rvMonths.setId(View.generateViewId());
+        int id = rvMonths.getId();
+        // generates an id if it's missing
+        if (id == View.NO_ID) {
+            if (Build.VERSION.SDK_INT < 17)
+                id = rvMonths.hashCode();
+            else
+                id = View.generateViewId();
+            rvMonths.setId(id);
+        }
         rvMonths.setHasFixedSize(true);
         rvMonths.setNestedScrollingEnabled(false);
 
@@ -513,6 +545,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
             super.onScrollStateChanged(recyclerView, newState);
         }
 
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
@@ -538,8 +571,8 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         }
     }
 
-    private void loadAsyncMonths(final boolean future){
-        if(asyncTask != null && (asyncTask.getStatus() == AsyncTask.Status.PENDING || asyncTask.getStatus() == AsyncTask.Status.RUNNING))
+    private void loadAsyncMonths(final boolean future) {
+        if (asyncTask != null && (asyncTask.getStatus() == AsyncTask.Status.PENDING || asyncTask.getStatus() == AsyncTask.Status.RUNNING))
             return;
 
         asyncTask = new FetchMonthsAsyncTask();
@@ -552,6 +585,29 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         }
 
         asyncTask.execute(new FetchMonthsAsyncTask.FetchParams(future, month, settingsManager, monthAdapter, SettingsManager.DEFAULT_MONTH_COUNT));
+    }
+
+
+    @Override
+    public Calendar getMinDate() {
+        return settingsManager.getMinDate();
+    }
+
+    @Override
+    public Calendar getMaxDate() {
+        return settingsManager.getMaxDate();
+    }
+
+    @Override
+    public void setMinDate(Calendar minDate) {
+        settingsManager.setMinDate(minDate);
+        monthAdapter.setMinDate(minDate);
+    }
+
+    @Override
+    public void setMaxDate(Calendar maxDate) {
+        settingsManager.setMaxDate(maxDate);
+        monthAdapter.setMaxDate(maxDate);
     }
 
     @Override
@@ -630,9 +686,9 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     public List<Day> getSelectedDays() {
 
         List<Day> selectedDays = new ArrayList<>();
-        for(Iterator<Month> monthIterator = monthAdapter.getData().iterator(); monthIterator.hasNext();) {
+        for (Iterator<Month> monthIterator = monthAdapter.getData().iterator(); monthIterator.hasNext(); ) {
             Month month = monthIterator.next();
-            for(Iterator<Day> dayIterator = month.getDaysWithoutTitlesAndOnlyCurrent().iterator(); dayIterator.hasNext();) {
+            for (Iterator<Day> dayIterator = month.getDaysWithoutTitlesAndOnlyCurrent().iterator(); dayIterator.hasNext(); ) {
                 Day day = dayIterator.next();
                 if (selectionManager.isDaySelected(day)) {
                     selectedDays.add(day);
@@ -775,7 +831,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
             for (Month mMonth : monthAdapter.getData()) {
 
-                if ( (mMonth.getFirstDay().getYearNumber() == mSelectionManager.getDays().first.getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getDays().first.getMonthNumber())) {
+                if ((mMonth.getFirstDay().getYearNumber() == mSelectionManager.getDays().first.getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getDays().first.getMonthNumber())) {
                     mPosition = i;
                     break;
                 }
@@ -789,7 +845,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
             for (Month mMonth : monthAdapter.getData()) {
 
-                if ( (mMonth.getFirstDay().getYearNumber() == mSelectionManager.getInitialDay().getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getInitialDay().getMonthNumber())) {
+                if ((mMonth.getFirstDay().getYearNumber() == mSelectionManager.getInitialDay().getYearNumber()) && (mMonth.getFirstDay().getMonthNumber() == mSelectionManager.getInitialDay().getMonthNumber())) {
                     mPosition = i;
                     break;
                 }
@@ -1172,16 +1228,16 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         }
     }
 
-    public void setOnMonthChangeListener(OnMonthChangeListener onMonthChangeListener){
+    public void setOnMonthChangeListener(OnMonthChangeListener onMonthChangeListener) {
         this.onMonthChangeListener = onMonthChangeListener;
     }
 
     @Override
     public void onSnap(int position) {
         Month month = monthAdapter.getData().get(position);
-        if(onMonthChangeListener != null
+        if (onMonthChangeListener != null
                 && (previousSelectedMonth == null || !previousSelectedMonth.getMonthName().equals(month.getMonthName()))) {
-                onMonthChangeListener.onMonthChanged(month);
+            onMonthChangeListener.onMonthChanged(month);
             previousSelectedMonth = month;
         }
     }

@@ -1,6 +1,7 @@
 package com.applikeysolutions.cosmocalendar.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.applikeysolutions.cosmocalendar.adapter.viewholder.MonthHolder;
