@@ -89,6 +89,19 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
 
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
         calendarView.setMinDate(Calendar.getInstance());
+        SimpleDateFormat mDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date sDate = mDateFormat.parse("22/6/2018");
+            Date eDate = mDateFormat.parse("20/7/2018");
+            //calendarView.setSelectedDaysRange(Day(sDate),Day(eDate));
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //calendarView.setSelectedDaysRange(Day(sDate),Day(eDate))
+
         calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
         calendarView.setSelectionType(SelectionType.SINGLE);
         calendarView.setSelectedDaySingle(mDay);
@@ -244,7 +257,7 @@ public class DefaultCalendarActivity extends AppCompatActivity implements RadioG
 
             case R.id.rb_range:
                 calendarView.setSelectionType(SelectionType.RANGE);
-                calendarView.setSelectedDaysRange(mDayInit, mDayEnd);
+                calendarView.setSelectedDaysRange(mDayInit, mDayInit);
 
                 menuFridays.setVisible(false);
                 menuThreeMonth.setVisible(false);

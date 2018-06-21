@@ -105,6 +105,8 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
 
     private FetchMonthsAsyncTask asyncTask;
 
+    private Boolean isOnFirstSelected = false;
+
     public CalendarView(Context context) {
         this(context, null);
     }
@@ -441,6 +443,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     }
 
     private void createRecyclerView() {
+
         rvMonths = new RecyclerView(getContext());
         int id = rvMonths.getId();
         // generates an id if it's missing
@@ -666,11 +669,18 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     }
 
     public void setSelectedDaysRange(Day start, Day end) {
+        // check startDate  == endDate not show background selected
+        if(start.equals(end)){
+            settingsManager.setSelectedDayBackgroundColor( ContextCompat.getColor(getContext(), R.color.transparent));
+        }
+
         selectionManager.setInitialPair(start, end);
 
         setFirstSelectedMonthPosition(SelectionType.RANGE);
 
         displaySelectedDays();
+
+
     }
 
     public void setSelectedDaySingle(Day mDay) {
@@ -741,8 +751,17 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
         lastVisibleMonthPosition = SettingsManager.DEFAULT_MONTH_COUNT / 2;
     }
 
+
+
+
+
     @Override
     public void onDaySelected() {
+        //update background range mode when first click
+        if(isOnFirstSelected){
+            settingsManager.setSelectedDayBackgroundColor( ContextCompat.getColor(getContext(), R.color.default_selected_day_background_color));
+            isOnFirstSelected = true;
+        }
 
         selectedDays = getSelectedDays();
         displaySelectedDays();
