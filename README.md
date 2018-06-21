@@ -22,7 +22,7 @@ Made by [Applikey Solutions](https://applikeysolutions.com)
 
 # Usage
   ```xml
-  compile 'com.github.applikeysolutions:cosmocalendar:1.0.4'
+  compile 'com.github.telember:cosmocalendar:1.1.5'
   ```
 
 # Customization
