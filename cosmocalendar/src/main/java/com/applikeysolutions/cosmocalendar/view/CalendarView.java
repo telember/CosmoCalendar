@@ -758,7 +758,7 @@ public class CalendarView extends RelativeLayout implements OnDaySelectedListene
     @Override
     public void onDaySelected() {
         //update background range mode when first click
-        if(isOnFirstSelected){
+        if(!isOnFirstSelected){
             settingsManager.setSelectedDayBackgroundColor( ContextCompat.getColor(getContext(), R.color.default_selected_day_background_color));
             isOnFirstSelected = true;
         }
