@@ -1,9 +1,8 @@
 # CosmoCalendar
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/AppliKeySolutions/CosmoCalendar/blob/master/LICENSE)
+[![Release](https://jitpack.io/v/telember/CosmoCalendar.svg)](https://jitpack.io/#telember/CosmoCalendar)
 
 Made by [Applikey Solutions](https://applikeysolutions.com)
-
-![](pictures/cosmo-calendar.png)
 
 * [Usage](#usage)
 * [Customization](#customization)
@@ -140,28 +139,6 @@ Single Choice             |  Multiple
 ![](pictures/Calendar-single_2.jpg)  |  ![](pictures/Calendar-multiple-years_2.jpg)
 Range             |  Customized
 ![](pictures/Calendar-range-years_2.jpg)  |  ![](pictures/Calendar-dialogue-dark_2.jpg)
-
-# Release Notes
-
-### 1.0.0
-- Release version.
-
-### 1.0.1
-- Functionality optimization
-- Added disabled days criteria feature
-- Added more customization for connected days (selected/unselected icon, top/bottom position for icon)
-
-### 1.0.2
-- Added "NONE" selection type
-- The functionality of creating months is optimized
-- Added OnMonthChangeListener
-
-### 1.0.3
-- Fixed crash on swipe
-- Connected days logic changed. Now you can add multiple connected day lists!
-
-### 1.0.4
-- Fixed small bugs
 
 # Contact Us
 
